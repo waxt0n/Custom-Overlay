@@ -11,7 +11,7 @@ import java.awt.GraphicsEnvironment;
 import java.awt.GraphicsDevice;
 import java.awt.HeadlessException;
 
-ArrayList<PImage> images = new ArrayList<PImage>();
+String[] images;
 
 OverlayWindow overlayWindow; 
 
@@ -47,16 +47,20 @@ void setup()
 
   shapeMode(CENTER);
 
-  output = createWriter("settings.txt"); 
+  output = createWriter("data\\settings.txt");
 
   surface.setTitle("Custom Overlay");
   surface.setResizable(false);
   surface.setLocation(100, 100);
 
-  images=loadImages(dataPath("")); //load images from the data folder into an ArrayList of images
-  if (images.size()>0) {//avoid out of range exception
-    img=images.get(0);//set img, the PImage variable that gets displayed
-  }
+  //images=loadImages(dataPath("")); //load images from the data folder into an ArrayList of images
+  //if (images.size()>0) {//avoid out of range exception
+  //  img=images.get(0);//set img, the PImage variable that gets displayed
+  //}
+  images = listImageNames(dataPath(""));
+  img=loadImage(images[counter]);
+  
+  setupSettings();
 
   overlayWindow=new OverlayWindow();
 
@@ -100,20 +104,20 @@ void draw()
   if (imageRight.click) {
     //loop through images
     counter++;
-    if (counter>=images.size()) {
+    if (counter>=images.length) {
       counter=0;
     }
-    if (images.size()>0) {//avoid out of range exception
-      img=images.get(counter);//set img, the PImage variable that gets displayed
+    if (images.length>0) {//avoid out of range exception
+      img=loadImage(images[counter]);//set img, the PImage variable that gets displayed
     }
   }
   if (imageLeft.click) {//loop through images backwards
     counter--;
     if (counter<0) {
-      counter=images.size()-1;
+      counter=images.length-1;
     }
-    if (images.size()>0) {//avoid out of range exception
-      img=images.get(counter);//set img, the PImage variable that gets displayed
+    if (images.length>0) {//avoid out of range exception
+      img=loadImage(images[counter]);//set img, the PImage variable that gets displayed
     }
   }
 
@@ -157,7 +161,7 @@ void draw()
 
 ArrayList<PImage> loadImages(String folderPath) {
   ArrayList<PImage> imgs = new ArrayList<PImage>();
-  String[] filenames = listFileNames(folderPath);
+  String[] filenames = listImageNames(folderPath);
   if (filenames!=null) {
     for (String fileName : filenames) {
       PImage tempImage = loadImage(folderPath + "/" + fileName);
@@ -169,11 +173,18 @@ ArrayList<PImage> loadImages(String folderPath) {
   return imgs;
 }
 
-String[] listFileNames(String dir) {
+String[] listImageNames(String dir) {
   File file = new File(dir);
+  String temp[];
   if (file.isDirectory()) {
-    String names[] = file.list();
-    return names;
+    temp = file.list();
   }
-  return null;
+  String names[];
+  for (int i = 0; i != temp.length; i++) {
+    String ext = temp[i].substring(temp[i].length()-3,temp[i].length());
+    if(ext.equals("png") || ext.equals("jpg") || ext.equals("gif")) {
+      names =append(names,temp[i]); // add temp[i] to end of names
+    }
+  }
+  return names;
 }
