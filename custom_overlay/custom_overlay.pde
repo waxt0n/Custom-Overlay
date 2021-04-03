@@ -44,39 +44,38 @@ void settings() {
 }
 void setup()
 {
+
+  shapeMode(CENTER);
+
   output = createWriter("settings.txt"); 
   
   surface.setTitle("Custom Overlay");
   surface.setResizable(false);
   surface.setLocation(100, 100);
-  
+
   images=loadImages(dataPath("")); //load images from the data folder into an ArrayList of images
+  if (images.size()>0) {//avoid out of range exception
+    img=images.get(0);//set img, the PImage variable that gets displayed
+  }
+
   overlayWindow=new OverlayWindow();
 
-  imageLeft = new Button(width*.1, height*.2, width/10, width/10);
-  imageLeft.text="<";
-  imageRight = new Button(width*.8, height*.2, width/10, width/10);
-  imageRight.text=">";
-  
-  xLeft = new Button(width*.1, height*.4, width/10, width/10);
-  xLeft.text="<";
-  xRight = new Button(width*.8, height*.4, width/10, width/10);
-  xRight.text=">";
-  
-  yLeft = new Button(width*.1, height*.6, width/10, width/10);
-  yLeft.text="<";
-  yRight = new Button(width*.8, height*.6, width/10, width/10);
-  yRight.text=">";
-  
-  scaleLeft = new Button(width*.1, height*.8, width/10, width/10);
-  scaleLeft.text="<";
-  scaleRight = new Button(width*.8, height*.8, width/10, width/10);
-  scaleRight.text=">";
+  imageLeft = new Button(width*.1, height*.2, width/10, width/10, "<");
+  imageRight = new Button(width*.8, height*.2, width/10, width/10, ">");
 
-  screenButton = new Button(width*.7, height*.075, width/5, width/12.5);
-  screenButton.text="disp";
-  
-  Test = new typeBox(width/2,height/2,60,30);
+  xLeft = new Button(width*.1, height*.4, width/10, width/10, "<");
+  xRight = new Button(width*.8, height*.4, width/10, width/10, ">");
+
+  yLeft = new Button(width*.1, height*.6, width/10, width/10, "<");
+  yRight = new Button(width*.8, height*.6, width/10, width/10, ">");
+
+  scaleLeft = new Button(width*.1, height*.8, width/10, width/10, "<");
+  scaleRight = new Button(width*.8, height*.8, width/10, width/10, ">");
+
+  screenButton = new Button(width*.5, height*.05, width/3, width/20, "display 1");
+  screenButton.textSize=10;
+  screenButton.radius=0;
+
 }
 
 void draw()
@@ -92,22 +91,22 @@ void draw()
   scaleRight.display();
   Test.run("test");
   textSize(20);
-  text("file:",width*.075,height*.175);
-  text("X offset:",width*.075,height*.375);
-  text("Y offset:",width*.075,height*.575);
-  text("Scale:",width*.075,height*.775);
-  if (imageRight.click||frameCount==1) {
+  text("file:", width*.075, height*.175);
+  text("X offset:", width*.075, height*.375);
+  text("Y offset:", width*.075, height*.575);
+  text("Scale:", width*.075, height*.775);
+
+  if (imageRight.click) {
     //loop through images
     counter++;
     if (counter>=images.size()) {
       counter=0;
     }
-
     if (images.size()>0) {//avoid out of range exception
       img=images.get(counter);//set img, the PImage variable that gets displayed
     }
   }
-  if (imageLeft.click) {
+  if (imageLeft.click) {//loop through images backwards
     counter--;
     if (counter<0) {
       counter=images.size()-1;
@@ -116,22 +115,25 @@ void draw()
       img=images.get(counter);//set img, the PImage variable that gets displayed
     }
   }
-  if(xLeft.click){
+
+  if (xLeft.clickRepeat) {
     xOffset--;
   }
-  if(xRight.click){
+  if (xRight.clickRepeat) {
     xOffset++;
   }
+
   if(yLeft.click){
     yOffset--;
   }
   if(yRight.click){
     yOffset++;
   }
-  if(scaleLeft.click){
+
+  if (scaleLeft.clickRepeat) {
     scale-=0.05;
   }
-  if(scaleRight.click){
+  if (scaleRight.clickRepeat) {
     scale+=0.05;
   }
 
@@ -139,9 +141,9 @@ void draw()
 
   GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
   GraphicsDevice[] devices = env.getScreenDevices();
-  int numberofScreens = devices.length;
+  int numberofScreens = devices.length;           //get number of screens
 
-  if (screenButton.click) {
+  if (screenButton.click) { //loop through screens
     screen++;
     if (screen>numberofScreens) {
       screen=1;
