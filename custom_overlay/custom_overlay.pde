@@ -48,7 +48,7 @@ void setup()
   shapeMode(CENTER);
 
   output = createWriter("settings.txt"); 
-  
+
   surface.setTitle("Custom Overlay");
   surface.setResizable(false);
   surface.setLocation(100, 100);
@@ -76,6 +76,7 @@ void setup()
   screenButton.textSize=10;
   screenButton.radius=0;
 
+  Test = new typeBox(width/2, height/2, 60, 30);
 }
 
 void draw()
@@ -123,18 +124,18 @@ void draw()
     xOffset++;
   }
 
-  if(yLeft.click){
+  if (yLeft.clickRepeat) {
     yOffset--;
   }
-  if(yRight.click){
+  if (yRight.clickRepeat) {
     yOffset++;
   }
 
   if (scaleLeft.clickRepeat) {
-    scale-=0.05;
+    scale-=0.01;
   }
   if (scaleRight.clickRepeat) {
-    scale+=0.05;
+    scale+=0.01;
   }
 
   screenButton.display();
@@ -148,6 +149,7 @@ void draw()
     if (screen>numberofScreens) {
       screen=1;
     }
+    screenButton.text="display "+screen;
     overlayWindow.close();
     overlayWindow=new OverlayWindow();
   }
