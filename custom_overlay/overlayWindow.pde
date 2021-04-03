@@ -7,7 +7,6 @@ class OverlayWindow extends PApplet {
   JFrame frame;
   JPanel panel;
   void settings() {
-    println(screen);
     fullScreen(screen); //which monitor
   }
   void setup() {

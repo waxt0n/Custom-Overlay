@@ -1,5 +1,4 @@
-class Button { //one option for a button class
-  //Button class by Palmer
+class Button {
   float X;
   float Y;
   float buttonWidth;
@@ -12,14 +11,12 @@ class Button { //one option for a button class
   PFont font;
   boolean enabled = true;
   boolean pressed = false;
-  boolean justPressed = false;
+  boolean wasPressed = false;
   boolean click = false;
   float clickX;
   float clickY;
   boolean mouseWasPressed = false;
   boolean visible = true;
-  boolean arrowOn = false;
-  int arrowDir = 0;
   boolean borderOn = true;
   color pressedColor = 256;
   color hoveredColor = 256;
@@ -27,10 +24,15 @@ class Button { //one option for a button class
   editInt offsetX;
   editInt offsetY;
   boolean useG=false;
+  boolean clickRepeat=false;
+  long millisClicked=0;
+  int timeToRepeat=250;
+  int radius=5;
 
-  Button(float _X, float _Y, float _buttonWidth, float _buttonHeight) {
+  Button(float _X, float _Y, float _buttonWidth, float _buttonHeight, String _text) {
     X = _X;
     Y = _Y;
+    text=_text;
     buttonWidth = _buttonWidth;
     buttonHeight = _buttonHeight;
     font = createFont("Lucida Sans Regular", textSize);
@@ -39,9 +41,10 @@ class Button { //one option for a button class
     offsetX=new editInt(0);
     offsetY=new editInt(0);
   }
-  Button(float _X, float _Y, float _buttonWidth, float _buttonHeight, PGraphics _drawTo, editInt _offsetX, editInt _offsetY) {
-    this(_X, _Y, _buttonWidth, _buttonHeight);
+  Button(float _X, float _Y, float _buttonWidth, float _buttonHeight, String _text, PGraphics _drawTo, editInt _offsetX, editInt _offsetY) {
+    this(_X, _Y, _buttonWidth, _buttonHeight, _text);
     drawTo=_drawTo;
+    text=_text;
     offsetX=_offsetX;
     offsetY=_offsetY;   
     useG=false;
@@ -60,17 +63,18 @@ class Button { //one option for a button class
       pressed = false;
     }
 
-    if (pressed) {
-      justPressed = true;
-    }
-
-    if (justPressed && !pressed) {
+    if (wasPressed && !pressed) {
       if (!mousePressed && (mouseX-offsetX.val) >= X && (mouseX-offsetX.val) <= X + buttonWidth && (mouseY-offsetY.val) >= Y && (mouseY-offsetY.val) <= Y + buttonHeight) {
         click = true;
       }
-      justPressed = false;
+    }
+    if (pressed&&!wasPressed) {
+      millisClicked=millis();
     }
 
+    clickRepeat=(!wasPressed&&pressed)||(pressed&&millis()-millisClicked>timeToRepeat);
+
+    wasPressed = pressed;
     mouseWasPressed = mousePressed;
   }
 
@@ -80,28 +84,7 @@ class Button { //one option for a button class
     drawTo.textFont(font);
     drawTo.textSize(textSize);
     drawTo.fill(textColor);
-    drawTo.text(text, X + buttonWidth / 2, Y + buttonHeight / 2);
-  }
-
-  void drawArrow() {
-    drawTo.pushStyle();
-    drawTo.stroke(textColor);
-    if (arrowDir == 0) {
-      drawTo.line(X + .25 * buttonWidth, Y + .5 * buttonHeight, X + .75 * buttonWidth, Y + .5 * buttonHeight + .5 * buttonWidth);
-      drawTo.line(X + .25 * buttonWidth, Y + .5 * buttonHeight, X + .75 * buttonWidth, Y + .5 * buttonHeight - .5 * buttonWidth);
-    }
-    if (arrowDir == 1) {
-      drawTo.line(X + .5 * buttonWidth, Y + .25 * buttonHeight, X + .5 * buttonWidth + .5 * buttonHeight, Y + .75 * buttonHeight);
-      drawTo.line(X + .5 * buttonWidth, Y + .25 * buttonHeight, X + .5 * buttonWidth - .5 * buttonHeight, Y + .75 * buttonHeight);
-    }
-    if (arrowDir == 2) {
-      drawTo.line(X + .75 * buttonWidth, Y + .5 * buttonHeight, X + .25 * buttonWidth, Y + .5 * buttonHeight + .5 * buttonWidth);
-      drawTo.line(X + .75 * buttonWidth, Y + .5 * buttonHeight, X + .25 * buttonWidth, Y + .5 * buttonHeight - .5 * buttonWidth);
-    }
-    if (arrowDir == 3) {
-      drawTo.line(X + .5 * buttonWidth, Y + .75 * buttonHeight, X + .5 * buttonWidth + .5 * buttonHeight, Y + .25 * buttonHeight);
-      drawTo.line(X + .5 * buttonWidth, Y + .75 * buttonHeight, X + .5 * buttonWidth - .5 * buttonHeight, Y + .25 * buttonHeight);
-    }
+    drawTo.text(text, X + buttonWidth / 2, Y + buttonHeight / 3);
     drawTo.popStyle();
   }
 
@@ -140,15 +123,11 @@ class Button { //one option for a button class
     if (!borderOn) {
       drawTo.noStroke();
     }
-    drawTo.rect(X, Y, buttonWidth, buttonHeight);
+    drawTo.rect(X, Y, buttonWidth, buttonHeight, radius, radius, radius, radius);
     drawText();
-    drawTo.popStyle();
     drawTo.popStyle();
     if (!useG) {
       drawTo.endDraw();
-    }
-    if (arrowOn) {
-      drawArrow();
     }
   }
 }
