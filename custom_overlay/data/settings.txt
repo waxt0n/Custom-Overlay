@@ -1,0 +1,7 @@
+1.png,0,0,2.11
+2.png,539,0,3.32
+3.png,0,0,1.00
+OG.png,0,0,1.00
+teers.png,0,0,1.00
+teers_aiming_cone.png,0,0,1.00
+teers_aiming_cone_2.png,0,0,1.00

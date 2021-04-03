@@ -11,7 +11,7 @@ import java.awt.GraphicsEnvironment;
 import java.awt.GraphicsDevice;
 import java.awt.HeadlessException;
 
-ArrayList<PImage> images = new ArrayList<PImage>();
+String[] images;
 
 OverlayWindow overlayWindow; 
 
@@ -45,20 +45,20 @@ void settings() {
 }
 void setup()
 {
+  setupSettings();
 
   shapeMode(CENTER);
   rectMode(CENTER);
 
-  output = createWriter("settings.txt"); 
-
+  
   surface.setTitle("Custom Overlay");
   surface.setResizable(false);
   surface.setLocation(100, 100);
-
-  images=loadImages(dataPath("")); //load images from the data folder into an ArrayList of images
-  if (images.size()>0) {//avoid out of range exception
-    img=images.get(0);//set img, the PImage variable that gets displayed
-  }
+  
+  img=loadImage(split(settings[counter],",")[0]);
+  xOffset=int(split(settings[counter],",")[1]);
+  yOffset=int(split(settings[counter],",")[2]);
+  scale=float(split(settings[counter],",")[3]);
 
   overlayWindow=new OverlayWindow();
 
@@ -102,22 +102,32 @@ void draw()
 
   if (imageRight.click) {
     //loop through images
+    settings[counter] = split(settings[counter],",")[0]+","+str(xOffset)+","+str(yOffset)+","+nf(scale,0,2);
+    updateSettings();
     counter++;
-    if (counter>=images.size()) {
+    if (counter>=settings.length) {
       counter=0;
     }
-    if (images.size()>0) {//avoid out of range exception
-      img=images.get(counter);//set img, the PImage variable that gets displayed
+    if (settings.length>0) {//avoid out of range exception
+      img=loadImage(split(settings[counter],",")[0]);//set img, the PImage variable that gets displayed
     }
+    xOffset=int(split(settings[counter],",")[1]);
+    yOffset=int(split(settings[counter],",")[2]);
+    scale=float(split(settings[counter],",")[3]);
   }
   if (imageLeft.click) {//loop through images backwards
+    settings[counter] = split(settings[counter],",")[0]+","+str(xOffset)+","+str(yOffset)+","+str(scale);
+    updateSettings();
     counter--;
     if (counter<0) {
-      counter=images.size()-1;
+      counter=settings.length-1;
     }
-    if (images.size()>0) {//avoid out of range exception
-      img=images.get(counter);//set img, the PImage variable that gets displayed
+    if (settings.length>0) {//avoid out of range exception
+      img=loadImage(split(settings[counter],",")[0]);//set img, the PImage variable that gets displayed
     }
+    xOffset=int(split(settings[counter],",")[1]);
+    yOffset=int(split(settings[counter],",")[2]);
+    scale=float(split(settings[counter],",")[3]);
   }
 
   if (xLeft.clickRepeat) {
@@ -160,7 +170,7 @@ void draw()
 
 ArrayList<PImage> loadImages(String folderPath) {
   ArrayList<PImage> imgs = new ArrayList<PImage>();
-  String[] filenames = listFileNames(folderPath);
+  String[] filenames = listImageNames(folderPath);
   if (filenames!=null) {
     for (String fileName : filenames) {
       PImage tempImage = loadImage(folderPath + "/" + fileName);
@@ -171,11 +181,20 @@ ArrayList<PImage> loadImages(String folderPath) {
   }
   return imgs;
 }
-String[] listFileNames(String dir) {
+
+String[] listImageNames(String dir) {
   File file = new File(dir);
-  if (file.isDirectory()) {
-    String names[] = file.list();
-    return names;
+
+  if (!file.isDirectory()) {
+    return null;
   }
-  return null;
+  String[] temp = file.list();
+  String names[]={};
+  for (int i = 0; i != temp.length; i++) {
+    String ext = temp[i].substring(temp[i].length()-3, temp[i].length());
+    if (ext.equals("png") || ext.equals("jpg") || ext.equals("gif")) {
+      names = append(names, temp[i]); // add temp[i] to end of names
+    }
+  }
+  return names;
 }
