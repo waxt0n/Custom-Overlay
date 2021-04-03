@@ -96,6 +96,7 @@ class Button {
       drawTo.beginDraw();
     }
     drawTo.pushStyle();
+    drawTo.rectMode(CORNER);
     drawTo.noStroke();
     drawTo.colorMode(HSB);
     if (pressed) {

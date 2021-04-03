@@ -25,7 +25,8 @@ Button scaleLeft;
 Button scaleRight;
 Button screenButton;
 
-typeBox Test;
+TypeBox testTypeBox;
+float testVal=0;
 
 PImage img;//image to show
 int counter=0;//which image to show
@@ -47,6 +48,7 @@ void setup()
   setupSettings();
 
   shapeMode(CENTER);
+  rectMode(CENTER);
 
   
   surface.setTitle("Custom Overlay");
@@ -76,7 +78,7 @@ void setup()
   screenButton.textSize=10;
   screenButton.radius=0;
 
-  Test = new typeBox(width/2, height/2, 60, 30);
+  testTypeBox = new TypeBox(width/2, height/2, 60, 30);
 }
 
 void draw()
@@ -90,7 +92,8 @@ void draw()
   yRight.display();
   scaleLeft.display();
   scaleRight.display();
-  Test.run("test");
+  testVal=testTypeBox.run(testVal);
+  println(testVal);
   textSize(20);
   text("file:", width*.075, height*.175);
   text("X offset:", width*.075, height*.375);
