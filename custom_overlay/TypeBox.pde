@@ -68,12 +68,11 @@ class TypeBox {
         }
       }
     }
-    stroke(255);
-    if (e)fill(0);
-    else fill(255);
+    if (e)fill(foregroundActivated);
+    else fill(foreground);
     rect(x, y, w, h);
-    if (e)fill(255);
-    else fill(0);
+    if (e)fill(textcolor);
+    else fill(textcolor);
     if (e) {
       text(entry, x, y, w, h);
     }

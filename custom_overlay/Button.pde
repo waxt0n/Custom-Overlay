@@ -4,8 +4,8 @@ class Button {
   float buttonWidth;
   float buttonHeight;
   float borderWeight = 10;
-  color primaryColor = #5D5D5D;
-  color textColor = #FFFFFF;
+  color primaryColor = foreground;
+  color textColor = textcolor;
   float textSize = 30;
   String text = "";
   PFont font;
@@ -18,8 +18,8 @@ class Button {
   boolean mouseWasPressed = false;
   boolean visible = true;
   boolean borderOn = true;
-  color pressedColor = 256;
-  color hoveredColor = 256;
+  color pressedColor = foregroundActivated;
+  color hoveredColor = foregroundActivated+20;
   PGraphics drawTo;
   editInt offsetX;
   editInt offsetY;

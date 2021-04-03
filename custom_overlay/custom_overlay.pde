@@ -38,6 +38,7 @@ float scale=1;
 
 color background = 20;
 color foreground = 128;
+color foregroundActivated = 80;
 color textcolor = 255;
 
 void settings() { 
