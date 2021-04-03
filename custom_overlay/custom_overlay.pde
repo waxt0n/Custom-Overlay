@@ -25,7 +25,8 @@ Button scaleLeft;
 Button scaleRight;
 Button screenButton;
 
-typeBox Test;
+TypeBox testTypeBox;
+float testVal=0;
 
 PImage img;//image to show
 int counter=0;//which image to show
@@ -46,6 +47,7 @@ void setup()
 {
 
   shapeMode(CENTER);
+  rectMode(CENTER);
 
   output = createWriter("settings.txt"); 
 
@@ -76,7 +78,7 @@ void setup()
   screenButton.textSize=10;
   screenButton.radius=0;
 
-  Test = new typeBox(width/2, height/2, 60, 30);
+  testTypeBox = new TypeBox(width/2, height/2, 60, 30);
 }
 
 void draw()
@@ -90,7 +92,8 @@ void draw()
   yRight.display();
   scaleLeft.display();
   scaleRight.display();
-  Test.run("test");
+  testVal=testTypeBox.run(testVal);
+  println(testVal);
   textSize(20);
   text("file:", width*.075, height*.175);
   text("X offset:", width*.075, height*.375);
@@ -168,7 +171,6 @@ ArrayList<PImage> loadImages(String folderPath) {
   }
   return imgs;
 }
-
 String[] listFileNames(String dir) {
   File file = new File(dir);
   if (file.isDirectory()) {

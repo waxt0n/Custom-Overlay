@@ -39,6 +39,7 @@ class OverlayWindow extends PApplet {
     frame.setBackground(new Color(0, 0, 0, 0));
   }
   void close() {
+    noLoop();
     frame.setVisible(false);
   }
 }
