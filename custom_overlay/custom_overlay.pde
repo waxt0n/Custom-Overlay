@@ -59,7 +59,7 @@ void setup()
   //}
   images = listImageNames(dataPath(""));
   img=loadImage(images[counter]);
-  
+
   setupSettings();
 
   overlayWindow=new OverlayWindow();
@@ -175,15 +175,16 @@ ArrayList<PImage> loadImages(String folderPath) {
 
 String[] listImageNames(String dir) {
   File file = new File(dir);
-  String temp[];
-  if (file.isDirectory()) {
-    temp = file.list();
+
+  if (!file.isDirectory()) {
+    return null;
   }
-  String names[];
+  String[] temp = file.list();
+  String names[]={};
   for (int i = 0; i != temp.length; i++) {
-    String ext = temp[i].substring(temp[i].length()-3,temp[i].length());
-    if(ext.equals("png") || ext.equals("jpg") || ext.equals("gif")) {
-      names =append(names,temp[i]); // add temp[i] to end of names
+    String ext = temp[i].substring(temp[i].length()-3, temp[i].length());
+    if (ext.equals("png") || ext.equals("jpg") || ext.equals("gif")) {
+      names = append(names, temp[i]); // add temp[i] to end of names
     }
   }
   return names;
