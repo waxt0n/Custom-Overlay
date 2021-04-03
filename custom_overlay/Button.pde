@@ -28,6 +28,7 @@ class Button {
   long millisClicked=0;
   int timeToRepeat=250;
   int radius=5;
+  int textOffset=0;
 
   Button(float _X, float _Y, float _buttonWidth, float _buttonHeight, String _text) {
     X = _X;
@@ -38,8 +39,8 @@ class Button {
     font = createFont("Lucida Sans Regular", textSize);
     drawTo=g;
     useG=true;
-    offsetX=new editInt(0);
-    offsetY=new editInt(0);
+    offsetX=new editInt(int(-buttonWidth/2));
+    offsetY=new editInt(int(-buttonHeight/2));
   }
   Button(float _X, float _Y, float _buttonWidth, float _buttonHeight, String _text, PGraphics _drawTo, editInt _offsetX, editInt _offsetY) {
     this(_X, _Y, _buttonWidth, _buttonHeight, _text);
@@ -84,7 +85,7 @@ class Button {
     drawTo.textFont(font);
     drawTo.textSize(textSize);
     drawTo.fill(textColor);
-    drawTo.text(text, X + buttonWidth / 2, Y + buttonHeight / 3);
+    drawTo.text(text, X, Y-buttonHeight*0.25+textOffset);
     drawTo.popStyle();
   }
 
@@ -96,7 +97,7 @@ class Button {
       drawTo.beginDraw();
     }
     drawTo.pushStyle();
-    drawTo.rectMode(CORNER);
+    drawTo.rectMode(CENTER);
     drawTo.noStroke();
     drawTo.colorMode(HSB);
     if (pressed) {
@@ -124,6 +125,7 @@ class Button {
     if (!borderOn) {
       drawTo.noStroke();
     }
+    drawTo.noStroke();
     drawTo.rect(X, Y, buttonWidth, buttonHeight, radius, radius, radius, radius);
     drawText();
     drawTo.popStyle();

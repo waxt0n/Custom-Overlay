@@ -9,6 +9,10 @@ void setupSettings() {
 
     updateSettings();
     
+  } else {
+    String temp[] = {};
+    saveStrings("data\\settings.txt",temp);
+    setupSettings();
   }
 }
 

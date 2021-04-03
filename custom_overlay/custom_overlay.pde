@@ -24,9 +24,15 @@ Button yRight;
 Button scaleLeft;
 Button scaleRight;
 Button screenButton;
+Button startButton;
+Button stopButton;
 
-TypeBox testTypeBox;
-float testVal=0;
+TypeBox fileBox;
+TypeBox xOffsetBox;
+TypeBox yOffsetBox;
+TypeBox scaleBox;
+
+String file = "test";
 
 PImage img;//image to show
 int counter=0;//which image to show
@@ -35,6 +41,7 @@ int screen=1;
 int xOffset=0;
 int yOffset=0;
 float scale=1;
+boolean somethingChanged = false;
 
 color background = 20;
 color foreground = 128;
@@ -51,35 +58,47 @@ void setup()
   shapeMode(CENTER);
   rectMode(CENTER);
 
-  
+
   surface.setTitle("Custom Overlay");
   surface.setResizable(false);
   surface.setLocation(100, 100);
-  
-  img=loadImage(split(settings[counter],",")[0]);
-  xOffset=int(split(settings[counter],",")[1]);
-  yOffset=int(split(settings[counter],",")[2]);
-  scale=float(split(settings[counter],",")[3]);
+
+  img=loadImage(split(settings[counter], ",")[0]);
+  file=split(settings[counter], ",")[0];
+  xOffset=int(split(settings[counter], ",")[1]);
+  yOffset=int(split(settings[counter], ",")[2]);
+  scale=float(split(settings[counter], ",")[3]);
 
   overlayWindow=new OverlayWindow();
 
-  imageLeft = new Button(width*.1, height*.2, width/10, width/10, "<");
-  imageRight = new Button(width*.8, height*.2, width/10, width/10, ">");
+  imageLeft = new Button(width*.15, height*.175, width/10, width/10, "<");
+  imageRight = new Button(width*.85, height*.175, width/10, width/10, ">");
 
-  xLeft = new Button(width*.1, height*.4, width/10, width/10, "<");
-  xRight = new Button(width*.8, height*.4, width/10, width/10, ">");
+  xLeft = new Button(width*.15, height*.375, width/10, width/10, "<");
+  xRight = new Button(width*.85, height*.375, width/10, width/10, ">");
 
-  yLeft = new Button(width*.1, height*.6, width/10, width/10, "<");
-  yRight = new Button(width*.8, height*.6, width/10, width/10, ">");
+  yLeft = new Button(width*.15, height*.575, width/10, width/10, "<");
+  yRight = new Button(width*.85, height*.575, width/10, width/10, ">");
 
-  scaleLeft = new Button(width*.1, height*.8, width/10, width/10, "<");
-  scaleRight = new Button(width*.8, height*.8, width/10, width/10, ">");
+  scaleLeft = new Button(width*.15, height*.775, width/10, width/10, "<");
+  scaleRight = new Button(width*.85, height*.775, width/10, width/10, ">");
 
-  screenButton = new Button(width*.5, height*.05, width/3, width/20, "display 1");
+  screenButton = new Button(width*.75, height*.075, width/4, width/15, "display 1");
   screenButton.textSize=10;
-  screenButton.radius=0;
+  screenButton.textOffset=1;
+  screenButton.radius=2;
 
-  testTypeBox = new TypeBox(width/2, height/2, 60, 30);
+  startButton = new Button(width*.725, height*.9125, width*.4, width/10, "Start");
+  startButton.textSize=20;
+  startButton.textOffset=3;
+  stopButton = new Button(width*.275, height*.9125, width*.4, width/10, "Stop");
+  stopButton.textSize=20;
+  stopButton.textOffset=3;
+
+  fileBox = new TypeBox(int(width*.5), int(height*.175), width*.5, width/10);
+  xOffsetBox = new TypeBox(int(width*.5), int(height*.375), width*.5, width/10);
+  yOffsetBox = new TypeBox(int(width*.5), int(height*.575), width*.5, width/10);
+  scaleBox = new TypeBox(int(width*.5), int(height*.775), width*.5, width/10);
 }
 
 void draw()
@@ -93,63 +112,101 @@ void draw()
   yRight.display();
   scaleLeft.display();
   scaleRight.display();
-  testVal=testTypeBox.run(testVal);
-  println(testVal);
+  startButton.display();
+  stopButton.display();
+  file=fileBox.run(file);
+  if (!file.equals(split(settings[counter], ",")[0]) && somethingChanged == true) {
+    String temp1 = file+".png";
+    String temp2 = file+".jpg";
+    String temp3 = file+".gif";
+    for (int i = 0; i < settings.length; i++) {
+      if (file.equals(split(settings[i], ",")[0]) || temp1.equals(split(settings[i], ",")[0]) || temp2.equals(split(settings[i], ",")[0]) || temp3.equals(split(settings[i], ",")[0])) {
+        counter = i;
+        img=loadImage(split(settings[counter], ",")[0]);
+        file=split(settings[counter], ",")[0];
+        xOffset=int(split(settings[counter], ",")[1]);
+        yOffset=int(split(settings[counter], ",")[2]);
+        scale=float(split(settings[counter], ",")[3]);
+      }
+    }
+  }
+  xOffset=xOffsetBox.run(xOffset);
+  yOffset=yOffsetBox.run(yOffset);
+  scale=scaleBox.run(scale);
   textSize(20);
-  text("file:", width*.075, height*.175);
-  text("X offset:", width*.075, height*.375);
-  text("Y offset:", width*.075, height*.575);
-  text("Scale:", width*.075, height*.775);
+  text("file:", width*.1, height*.1);
+  text("X offset:", width*.1, height*.3);
+  text("Y offset:", width*.1, height*.5);
+  text("Scale:", width*.1, height*.7);
 
   if (imageRight.click) {
     //loop through images
-    settings[counter] = split(settings[counter],",")[0]+","+str(xOffset)+","+str(yOffset)+","+nf(scale,0,2);
+    settings[counter] = split(settings[counter], ",")[0]+","+str(xOffset)+","+str(yOffset)+","+nf(scale, 0, 2);
     updateSettings();
     counter++;
     if (counter>=settings.length) {
       counter=0;
     }
     if (settings.length>0) {//avoid out of range exception
-      img=loadImage(split(settings[counter],",")[0]);//set img, the PImage variable that gets displayed
+      img=loadImage(split(settings[counter], ",")[0]);//set img, the PImage variable that gets displayed
     }
-    xOffset=int(split(settings[counter],",")[1]);
-    yOffset=int(split(settings[counter],",")[2]);
-    scale=float(split(settings[counter],",")[3]);
+    file=split(settings[counter], ",")[0];
+    xOffset=int(split(settings[counter], ",")[1]);
+    yOffset=int(split(settings[counter], ",")[2]);
+    scale=float(split(settings[counter], ",")[3]);
   }
   if (imageLeft.click) {//loop through images backwards
-    settings[counter] = split(settings[counter],",")[0]+","+str(xOffset)+","+str(yOffset)+","+str(scale);
+    settings[counter] = split(settings[counter], ",")[0]+","+str(xOffset)+","+str(yOffset)+","+str(scale);
     updateSettings();
     counter--;
     if (counter<0) {
       counter=settings.length-1;
     }
     if (settings.length>0) {//avoid out of range exception
-      img=loadImage(split(settings[counter],",")[0]);//set img, the PImage variable that gets displayed
+      img=loadImage(split(settings[counter], ",")[0]);//set img, the PImage variable that gets displayed
     }
-    xOffset=int(split(settings[counter],",")[1]);
-    yOffset=int(split(settings[counter],",")[2]);
-    scale=float(split(settings[counter],",")[3]);
+    file=split(settings[counter], ",")[0];
+    xOffset=int(split(settings[counter], ",")[1]);
+    yOffset=int(split(settings[counter], ",")[2]);
+    scale=float(split(settings[counter], ",")[3]);
   }
 
   if (xLeft.clickRepeat) {
     xOffset--;
+    somethingChanged = true;
   }
   if (xRight.clickRepeat) {
     xOffset++;
+    somethingChanged = true;
   }
 
   if (yLeft.clickRepeat) {
     yOffset--;
+    somethingChanged = true;
   }
   if (yRight.clickRepeat) {
     yOffset++;
+    somethingChanged = true;
   }
 
   if (scaleLeft.clickRepeat) {
     scale-=0.01;
+    somethingChanged = true;
   }
   if (scaleRight.clickRepeat) {
     scale+=0.01;
+    somethingChanged = true;
+  }
+  if (startButton.click) {
+    if (overlayWindow == null) {
+      overlayWindow=new OverlayWindow();
+    }
+  }
+  if (stopButton.click) {
+    if (overlayWindow !=null) {
+      overlayWindow.close();
+      overlayWindow = null;
+    }
   }
 
   screenButton.display();
@@ -164,8 +221,16 @@ void draw()
       screen=1;
     }
     screenButton.text="display "+screen;
-    overlayWindow.close();
-    overlayWindow=new OverlayWindow();
+    if (overlayWindow !=null) {
+      overlayWindow.close();
+      overlayWindow=new OverlayWindow();
+    }
+  }
+
+  if (somethingChanged && frameCount%60 == 0) {
+    somethingChanged = false;
+    settings[counter] = split(settings[counter], ",")[0]+","+str(xOffset)+","+str(yOffset)+","+str(scale);
+    saveStrings("data\\settings.txt", settings);
   }
 }
 

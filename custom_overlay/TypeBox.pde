@@ -8,7 +8,7 @@ class TypeBox {
   boolean e;
   boolean le;
   String entry="";
-  TypeBox(int _x, int _y, int _w, int _h) {
+  TypeBox(int _x, int _y, float _w, float _h) {
     x=_x;
     y=_y;
     w=_w;
@@ -83,6 +83,7 @@ class TypeBox {
     if (!e&&le) {//edit finished
       if (entry!="") {
         val=entry;
+        somethingChanged = true;
       }
     }
     if (!e) {
@@ -99,6 +100,7 @@ class TypeBox {
     if (!e&&le) {//edit finished
       if (int(entry)==int(entry)&&entry!="") {
         val=int(entry);
+        somethingChanged = true;
       }
     }
     if (!e) {
@@ -115,6 +117,7 @@ class TypeBox {
     if (!e&&le) {//edit finished
       if (float(entry)==float(entry)&&entry!="") {//NaN check
         val=float(entry);
+        somethingChanged = true;
       }
     }
     if (!e) {
