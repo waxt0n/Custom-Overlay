@@ -25,6 +25,8 @@ Button scaleLeft;
 Button scaleRight;
 Button screenButton;
 
+typeBox Test;
+
 PImage img;//image to show
 int counter=0;//which image to show
 
@@ -33,12 +35,20 @@ int xOffset=0;
 int yOffset=0;
 float scale=1;
 
+color background = 20;
+color foreground = 128;
+color textcolor = 255;
+
 void settings() { 
   size(250, 300);
 }
 void setup()
 {
+
   shapeMode(CENTER);
+
+  output = createWriter("settings.txt"); 
+  
   surface.setTitle("Custom Overlay");
   surface.setResizable(false);
   surface.setLocation(100, 100);
@@ -65,11 +75,12 @@ void setup()
   screenButton = new Button(width*.5, height*.05, width/3, width/20, "display 1");
   screenButton.textSize=10;
   screenButton.radius=0;
+
 }
 
 void draw()
 {
-  background(20);
+  background(background);
   imageLeft.display();
   imageRight.display();
   xLeft.display();
@@ -78,6 +89,7 @@ void draw()
   yRight.display();
   scaleLeft.display();
   scaleRight.display();
+  Test.run("test");
   textSize(20);
   text("file:", width*.075, height*.175);
   text("X offset:", width*.075, height*.375);
@@ -111,11 +123,11 @@ void draw()
     xOffset++;
   }
 
-  if (yLeft.clickRepeat) {
-    yOffset++;
-  }
-  if (yRight.clickRepeat) {
+  if(yLeft.click){
     yOffset--;
+  }
+  if(yRight.click){
+    yOffset++;
   }
 
   if (scaleLeft.clickRepeat) {
