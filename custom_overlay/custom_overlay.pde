@@ -7,15 +7,22 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
+import java.awt.GraphicsEnvironment;
+import java.awt.GraphicsDevice;
+import java.awt.HeadlessException;
+
 ArrayList<PImage> images = new ArrayList<PImage>();
 
 OverlayWindow overlayWindow; 
 
 Button leftButton;
 Button rightButton;
+Button screenButton;
 
 PImage img;//image to show
 int counter=0;//which image to show
+
+int screen=1;
 
 void settings() { 
   size(300, 400);
@@ -32,6 +39,9 @@ void setup()
   rightButton = new Button(width*.8, height*.5, width/10, width/10);
   rightButton.arrowOn = true;
   rightButton.arrowDir = 2;
+
+  screenButton = new Button(width*.5, height*.7, width/4, width/10);
+  screenButton.text="disp";
 }
 
 void draw()
@@ -58,6 +68,21 @@ void draw()
     if (images.size()>0) {//avoid out of range exception
       img=images.get(counter);//set img, the PImage variable that gets displayed
     }
+  }
+
+  screenButton.display();
+
+  GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
+  GraphicsDevice[] devices = env.getScreenDevices();
+  int numberofScreens = devices.length;
+
+  if (screenButton.click) {
+    screen++;
+    if (screen>numberofScreens) {
+      screen=1;
+    }
+    overlayWindow.close();
+    overlayWindow=new OverlayWindow();
   }
 }
 

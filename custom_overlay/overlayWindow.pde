@@ -7,7 +7,8 @@ class OverlayWindow extends PApplet {
   JFrame frame;
   JPanel panel;
   void settings() {
-    fullScreen(1); //which monitor
+    println(screen);
+    fullScreen(screen); //which monitor
   }
   void setup() {
     pg = createGraphics(width, height);
@@ -31,10 +32,13 @@ class OverlayWindow extends PApplet {
     pg.background(0, 0);
     if (img!=null) {
       pg.tint(255, 100);//second term is opacity
-      pg.image(img, 0, 0);
+      pg.image(img, 0, 0, width, height);
       pg.noTint();
     }
     pg.endDraw();
     frame.setBackground(new Color(0, 0, 0, 0));
+  }
+  void close() {
+    frame.setVisible(false);
   }
 }
