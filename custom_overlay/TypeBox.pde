@@ -7,7 +7,7 @@ class TypeBox {
   float h;
   boolean e;
   boolean le;
-  String entry;
+  String entry="";
   TypeBox(int _x, int _y, int _w, int _h) {
     x=_x;
     y=_y;
@@ -41,9 +41,6 @@ class TypeBox {
         keyPressTypeBox=false;
       }
     }
-    if (e&&!le) {//just activated
-      entry="";
-    }
     textSize(h*.75);
     if (e) {
       if (keyPressTypeBox&&textWidth(entry)<w-h*.75) {
@@ -68,16 +65,20 @@ class TypeBox {
         }
       }
     }
-    if (e)fill(foregroundActivated);
-    else fill(foreground);
-    rect(x, y, w, h);
-    if (e)fill(textcolor);
-    else fill(textcolor);
+    if (e)fill(foregroundActivated);//fill clicked
+    else if (mInC(x, y, w, h)) fill(foregroundActivated+20); //fill hovered
+    else fill(foreground); //fill normal
+    rect(x, y, w, h, 5, 5, 5, 5);
+    if (e)fill(textcolor);//text clicked
+    else fill(textcolor);//text normal
     if (e) {
-      text(entry, x, y, w, h);
+      text(entry, x+5, y, w, h);
     }
   }
   String run(String val) {
+    if (e&&!le) {
+      entry=val;
+    }
     doCommon(0);
     if (!e&&le) {//edit finished
       if (entry!="") {
@@ -85,12 +86,15 @@ class TypeBox {
       }
     }
     if (!e) {
-      text(val, x, y, w, h);
+      text(val, x+5, y, w, h);
     }
     popStyle();
     return val;
   }
   int run(int val) {
+    if (e&&!le) {
+      entry=str(val);
+    }
     doCommon(1);
     if (!e&&le) {//edit finished
       if (int(entry)==int(entry)&&entry!="") {
@@ -98,12 +102,15 @@ class TypeBox {
       }
     }
     if (!e) {
-      text(str(val), x, y, w, h);
+      text(str(val), x+5, y, w, h);
     }
     popStyle();
     return val;
   }
   float run(float val) {
+    if (e&&!le) {
+      entry=str(val);
+    }
     doCommon(2);
     if (!e&&le) {//edit finished
       if (float(entry)==float(entry)&&entry!="") {//NaN check
@@ -111,7 +118,7 @@ class TypeBox {
       }
     }
     if (!e) {
-      text(str(val), x, y, w, h);
+      text(str(val), x+5, y, w, h);
     }
     popStyle();
     return val;
