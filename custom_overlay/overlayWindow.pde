@@ -4,21 +4,17 @@ class OverlayWindow extends PApplet {
     PApplet.runSketch(new String[] {this.getClass().getSimpleName()}, this);
   }
   PGraphics pg;
-  PImage img;
   JFrame frame;
   JPanel panel;
-
   void settings() {
     fullScreen(1); //which monitor
   }
-  void setup() {  
-    surface.setAlwaysOnTop(true);
-
-   // img = loadImage("teers_aiming_cone.png");
-    frame = (JFrame)((PSurfaceAWT.SmoothCanvas) getSurface().getNative()).getFrame();
-
+  void setup() {
     pg = createGraphics(width, height);
 
+    surface.setAlwaysOnTop(true);
+
+    frame = (JFrame)((PSurfaceAWT.SmoothCanvas) getSurface().getNative()).getFrame();
     JPanel panel = new JPanel() {
       @Override
         protected void paintComponent(Graphics graphics) {
@@ -33,8 +29,11 @@ class OverlayWindow extends PApplet {
   void draw() {
     pg.beginDraw();
     pg.background(0, 0);
-    pg.ellipse(50,50,50,50);
-    //pg.image(img, 0, 0);
+    if (img!=null) {
+      pg.tint(255, 100);//second term is opacity
+      pg.image(img, 0, 0);
+      pg.noTint();
+    }
     pg.endDraw();
     frame.setBackground(new Color(0, 0, 0, 0));
   }
