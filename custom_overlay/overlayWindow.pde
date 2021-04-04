@@ -15,6 +15,7 @@ class OverlayWindow extends PApplet {
     surface.setAlwaysOnTop(true);
 
     frame = (JFrame)((PSurfaceAWT.SmoothCanvas) getSurface().getNative()).getFrame();
+    frame.setBackground(new Color(0, 0, 0, 0));
     JPanel panel = new JPanel() {
       @Override
         protected void paintComponent(Graphics graphics) {

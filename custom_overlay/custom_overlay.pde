@@ -141,7 +141,7 @@ void draw()
 
   if (imageRight.click) {
     //loop through images
-    settings[counter] = split(settings[counter], ",")[0]+","+str(xOffset)+","+str(yOffset)+","+nf(scale, 0, 2);
+    settings[counter] = split(settings[counter], ",")[0]+","+str(xOffset)+","+str(yOffset)+","+nf(scale, 0, 3);
     updateSettings();
     counter++;
     if (counter>=settings.length) {
@@ -156,7 +156,7 @@ void draw()
     scale=float(split(settings[counter], ",")[3]);
   }
   if (imageLeft.click) {//loop through images backwards
-    settings[counter] = split(settings[counter], ",")[0]+","+str(xOffset)+","+str(yOffset)+","+str(scale);
+    settings[counter] = split(settings[counter], ",")[0]+","+str(xOffset)+","+str(yOffset)+","+nf(scale, 0, 3);
     updateSettings();
     counter--;
     if (counter<0) {
@@ -190,11 +190,11 @@ void draw()
   }
 
   if (scaleLeft.clickRepeat) {
-    scale-=0.01;
+    scale = float(nf(scale-0.01, 0, 3));
     somethingChanged = true;
   }
   if (scaleRight.clickRepeat) {
-    scale+=0.01;
+    scale = float(nf(scale+0.01, 0, 3));
     somethingChanged = true;
   }
   if (startButton.click) {
@@ -229,7 +229,7 @@ void draw()
 
   if (somethingChanged && frameCount%60 == 0) {
     somethingChanged = false;
-    settings[counter] = split(settings[counter], ",")[0]+","+str(xOffset)+","+str(yOffset)+","+str(scale);
+    settings[counter] = split(settings[counter], ",")[0]+","+str(xOffset)+","+str(yOffset)+","+nf(scale, 0, 3);
     saveStrings("data\\settings.txt", settings);
   }
 }
