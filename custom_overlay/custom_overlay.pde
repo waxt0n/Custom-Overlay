@@ -23,6 +23,8 @@ Button yLeft;
 Button yRight;
 Button scaleLeft;
 Button scaleRight;
+Button alphaLeft;
+Button alphaRight;
 Button screenButton;
 Button startButton;
 Button stopButton;
@@ -31,6 +33,7 @@ TypeBox fileBox;
 TypeBox xOffsetBox;
 TypeBox yOffsetBox;
 TypeBox scaleBox;
+TypeBox alphaBox;
 
 String file = "test";
 
@@ -41,6 +44,7 @@ int screen=1;
 int xOffset=0;
 int yOffset=0;
 float scale=1;
+float alpha = 1;
 boolean somethingChanged = false;
 
 color background = 20;
@@ -49,7 +53,7 @@ color foregroundActivated = 80;
 color textcolor = 255;
 
 void settings() { 
-  size(250, 300);
+  size(250, 360);
 }
 void setup()
 {
@@ -68,37 +72,42 @@ void setup()
   xOffset=int(split(settings[counter], ",")[1]);
   yOffset=int(split(settings[counter], ",")[2]);
   scale=float(split(settings[counter], ",")[3]);
+  alpha=float(split(settings[counter], ",")[4]);
 
   overlayWindow=new OverlayWindow();
 
-  imageLeft = new Button(width*.15, height*.175, width/10, width/10, "<");
-  imageRight = new Button(width*.85, height*.175, width/10, width/10, ">");
+  imageLeft = new Button(37.5, 52.5, 25, 25, "<");
+  imageRight = new Button(212.5, 52.5, 25, 25, ">");
 
-  xLeft = new Button(width*.15, height*.375, width/10, width/10, "<");
-  xRight = new Button(width*.85, height*.375, width/10, width/10, ">");
+  xLeft = new Button(37.5, 112.5, 25, 25, "<");
+  xRight = new Button(212.5, 112.5, 25, 25, ">");
 
-  yLeft = new Button(width*.15, height*.575, width/10, width/10, "<");
-  yRight = new Button(width*.85, height*.575, width/10, width/10, ">");
+  yLeft = new Button(37.5, 172.5, 25, 25, "<");
+  yRight = new Button(212.5, 172.5, 25, 25, ">");
 
-  scaleLeft = new Button(width*.15, height*.775, width/10, width/10, "<");
-  scaleRight = new Button(width*.85, height*.775, width/10, width/10, ">");
+  scaleLeft = new Button(37.5, 232.5, 25, 25, "<");
+  scaleRight = new Button(212.5, 232.5, 25, 25, ">");
+  
+  alphaLeft = new Button(37.5, 292.5, 25, 25, "<");
+  alphaRight = new Button(212.5, 292.5, 25, 25, ">");
 
-  screenButton = new Button(width*.75, height*.075, width/4, width/15, "display 1");
+  screenButton = new Button(187.5, 22.5, 62.5, 16.5, "display 1");
   screenButton.textSize=10;
   screenButton.textOffset=1;
   screenButton.radius=2;
 
-  startButton = new Button(width*.725, height*.9125, width*.4, width/10, "Start");
+  startButton = new Button(181.25, 333.75, 100, 25, "Start");
   startButton.textSize=20;
   startButton.textOffset=3;
-  stopButton = new Button(width*.275, height*.9125, width*.4, width/10, "Stop");
+  stopButton = new Button(68.75, 333.75, 100, 25, "Stop");
   stopButton.textSize=20;
   stopButton.textOffset=3;
 
-  fileBox = new TypeBox(int(width*.5), int(height*.175), width*.5, width/10);
-  xOffsetBox = new TypeBox(int(width*.5), int(height*.375), width*.5, width/10);
-  yOffsetBox = new TypeBox(int(width*.5), int(height*.575), width*.5, width/10);
-  scaleBox = new TypeBox(int(width*.5), int(height*.775), width*.5, width/10);
+  fileBox = new TypeBox(int(125), int(52.5), 125, 25);
+  xOffsetBox = new TypeBox(int(125), int(112.5), 125, 25);
+  yOffsetBox = new TypeBox(int(125), int(172.5), 125, 25);
+  scaleBox = new TypeBox(int(125), int(232.5), 125, 25);
+  alphaBox = new TypeBox(int(125), int(292.5), 125, 25);
 }
 
 void draw()
@@ -112,6 +121,8 @@ void draw()
   yRight.display();
   scaleLeft.display();
   scaleRight.display();
+  alphaLeft.display();
+  alphaRight.display();
   startButton.display();
   stopButton.display();
   file=fileBox.run(file);
@@ -127,21 +138,24 @@ void draw()
         xOffset=int(split(settings[counter], ",")[1]);
         yOffset=int(split(settings[counter], ",")[2]);
         scale=float(split(settings[counter], ",")[3]);
+        alpha=float(split(settings[counter], ",")[4]);
       }
     }
   }
   xOffset=xOffsetBox.run(xOffset);
   yOffset=yOffsetBox.run(yOffset);
   scale=scaleBox.run(scale);
+  alpha=constrain(alphaBox.run(alpha),0,1);
   textSize(20);
-  text("file:", width*.1, height*.1);
-  text("X offset:", width*.1, height*.3);
-  text("Y offset:", width*.1, height*.5);
-  text("Scale:", width*.1, height*.7);
+  text("file:", 25, 30);
+  text("X offset:", 25, 90);
+  text("Y offset:", 25, 150);
+  text("Scale:", 25, 210);
+  text("Opacity:", 25, 270);
 
   if (imageRight.click) {
     //loop through images
-    settings[counter] = split(settings[counter], ",")[0]+","+str(xOffset)+","+str(yOffset)+","+nf(scale, 0, 3);
+    settings[counter] = split(settings[counter], ",")[0]+","+str(xOffset)+","+str(yOffset)+","+nf(scale, 0, 3)+","+nf(alpha, 0, 3);
     updateSettings();
     counter++;
     if (counter>=settings.length) {
@@ -154,9 +168,10 @@ void draw()
     xOffset=int(split(settings[counter], ",")[1]);
     yOffset=int(split(settings[counter], ",")[2]);
     scale=float(split(settings[counter], ",")[3]);
+    alpha=float(split(settings[counter], ",")[4]);
   }
   if (imageLeft.click) {//loop through images backwards
-    settings[counter] = split(settings[counter], ",")[0]+","+str(xOffset)+","+str(yOffset)+","+nf(scale, 0, 3);
+    settings[counter] = split(settings[counter], ",")[0]+","+str(xOffset)+","+str(yOffset)+","+nf(scale, 0, 3)+","+nf(alpha, 0, 3);
     updateSettings();
     counter--;
     if (counter<0) {
@@ -169,6 +184,7 @@ void draw()
     xOffset=int(split(settings[counter], ",")[1]);
     yOffset=int(split(settings[counter], ",")[2]);
     scale=float(split(settings[counter], ",")[3]);
+    alpha=float(split(settings[counter], ",")[4]);
   }
 
   if (xLeft.clickRepeat) {
@@ -195,6 +211,14 @@ void draw()
   }
   if (scaleRight.clickRepeat) {
     scale = float(nf(scale+0.01, 0, 3));
+    somethingChanged = true;
+  }
+  if (alphaLeft.clickRepeat) {
+    alpha = float(nf(constrain(alpha-0.005,0,1), 0, 3));
+    somethingChanged = true;
+  }
+  if (alphaRight.clickRepeat) {
+    alpha = float(nf(constrain(alpha+0.005,0,1), 0, 3));
     somethingChanged = true;
   }
   if (startButton.click) {
@@ -229,7 +253,7 @@ void draw()
 
   if (somethingChanged && frameCount%60 == 0) {
     somethingChanged = false;
-    settings[counter] = split(settings[counter], ",")[0]+","+str(xOffset)+","+str(yOffset)+","+nf(scale, 0, 3);
+    settings[counter] = split(settings[counter], ",")[0]+","+str(xOffset)+","+str(yOffset)+","+nf(scale, 0, 3)+","+nf(alpha, 0, 3);
     saveStrings("data\\settings.txt", settings);
   }
 }

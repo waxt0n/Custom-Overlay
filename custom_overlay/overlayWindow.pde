@@ -33,6 +33,7 @@ class OverlayWindow extends PApplet {
     if (img!=null) {
       pg.tint(255);//second term is opacity
       pg.imageMode(CENTER);
+      pg.tint(255,alpha*255);
       pg.image(img, width/2+xOffset, height/2-yOffset, img.width*scale, img.height*scale);
       pg.noTint();
     }
