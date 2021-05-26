@@ -45,7 +45,7 @@ int xOffset=0;
 int yOffset=0;
 float scale=1;
 float alpha = 1;
-boolean somethingChanged = true;
+boolean somethingChanged = false;
 
 color background = 20;
 color foreground = 128;
@@ -103,11 +103,11 @@ void setup()
   stopButton.textSize=20;
   stopButton.textOffset=3;
 
-  fileBox = new TypeBox(int(125), int(52.5), 125, 25, true);
-  xOffsetBox = new TypeBox(int(125), int(112.5), 125, 25, false);
-  yOffsetBox = new TypeBox(int(125), int(172.5), 125, 25, false);
-  scaleBox = new TypeBox(int(125), int(232.5), 125, 25, false);
-  alphaBox = new TypeBox(int(125), int(292.5), 125, 25, false);
+  fileBox = new TypeBox(int(125), int(52.5), 125, 25);
+  xOffsetBox = new TypeBox(int(125), int(112.5), 125, 25);
+  yOffsetBox = new TypeBox(int(125), int(172.5), 125, 25);
+  scaleBox = new TypeBox(int(125), int(232.5), 125, 25);
+  alphaBox = new TypeBox(int(125), int(292.5), 125, 25);
 }
 
 void draw()
@@ -126,7 +126,7 @@ void draw()
   startButton.display();
   stopButton.display();
   file=fileBox.run(file);
-  if (!file.equals(split(settings[counter], ",")[0]) && somethingChanged) {
+  if (!file.equals(split(settings[counter], ",")[0]) && somethingChanged == true) {
     String temp1 = file+".png";
     String temp2 = file+".jpg";
     String temp3 = file+".gif";
@@ -169,7 +169,6 @@ void draw()
     yOffset=int(split(settings[counter], ",")[2]);
     scale=float(split(settings[counter], ",")[3]);
     alpha=float(split(settings[counter], ",")[4]);
-    somethingChanged = true;
   }
   if (imageLeft.click) {//loop through images backwards
     settings[counter] = split(settings[counter], ",")[0]+","+str(xOffset)+","+str(yOffset)+","+nf(scale, 0, 3)+","+nf(alpha, 0, 3);
@@ -186,7 +185,6 @@ void draw()
     yOffset=int(split(settings[counter], ",")[2]);
     scale=float(split(settings[counter], ",")[3]);
     alpha=float(split(settings[counter], ",")[4]);
-    somethingChanged = true;
   }
 
   if (xLeft.clickRepeat) {

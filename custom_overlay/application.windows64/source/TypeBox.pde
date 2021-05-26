@@ -8,15 +8,13 @@ class TypeBox {
   boolean e;
   boolean le;
   String entry="";
-  boolean clear;
-  TypeBox(int _x, int _y, float _w, float _h, boolean _clear) {
+  TypeBox(int _x, int _y, float _w, float _h) {
     x=_x;
     y=_y;
     w=_w;
     h=_h;
     e=false;
     le=false;
-    clear=_clear;
   }
   void doCommon(int numMode) {
     pushStyle();
@@ -78,12 +76,8 @@ class TypeBox {
     }
   }
   String run(String val) {
-    if (e&&!le) {//activate
-      if (clear) {
-        entry="";
-      } else {
-        entry=val;
-      }
+    if (e&&!le) {
+      entry=val;
     }
     doCommon(0);
     if (!e&&le) {//edit finished
@@ -100,11 +94,7 @@ class TypeBox {
   }
   int run(int val) {
     if (e&&!le) {
-      if (clear) {
-        entry="";
-      } else {
-        entry=str(val);
-      }
+      entry=str(val);
     }
     doCommon(1);
     if (!e&&le) {//edit finished
@@ -121,11 +111,7 @@ class TypeBox {
   }
   float run(float val) {
     if (e&&!le) {
-      if (clear) {
-        entry="";
-      } else {
-        entry=str(val);
-      }
+      entry=str(val);
     }
     doCommon(2);
     if (!e&&le) {//edit finished

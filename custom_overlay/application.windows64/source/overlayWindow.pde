@@ -10,7 +10,6 @@ class OverlayWindow extends PApplet {
     fullScreen(screen); //which monitor
   }
   void setup() {
-    
     pg = createGraphics(width, height);
 
     surface.setAlwaysOnTop(true);
@@ -29,12 +28,10 @@ class OverlayWindow extends PApplet {
     frame.setContentPane(panel);
   }
   void draw() {
-    if(frameCount<=10||somethingChanged){
-    println(frameRate + " " + millis() + " " + frameCount);
     pg.beginDraw();
     pg.background(0, 0);
     if (img!=null) {
-      //pg.tint(255);//second term is opacity
+      pg.tint(255);//second term is opacity
       pg.imageMode(CENTER);
       pg.tint(255,alpha*255);
       pg.image(img, width/2+xOffset, height/2-yOffset, img.width*scale, img.height*scale);
@@ -42,7 +39,6 @@ class OverlayWindow extends PApplet {
     }
     pg.endDraw();
     frame.setBackground(new Color(0, 0, 0, 0));
-    }
   }
   void close() {
     noLoop();
