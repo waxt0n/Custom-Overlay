@@ -30,7 +30,7 @@ class OverlayWindow extends PApplet {
   }
   void draw() {
     if(frameCount<=10||somethingChanged){
-    println(frameRate + " " + millis() + " " + frameCount);
+    //println(frameRate + " " + millis() + " " + frameCount);
     pg.beginDraw();
     pg.background(0, 0);
     if (img!=null) {
